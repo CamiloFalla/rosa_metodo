@@ -18,7 +18,7 @@ export default function LanguageSelector() {
 
       {/* Lista desplegable de idiomas */}
       {isOpen && (
-        <ul className="absolute right-0 bg-white shadow-md mt-2 py-2 w-28 rounded-lg">
+        <ul className="absolute right-0 bg-orange-600 shadow-md mt-2 py-2 w-28 rounded-lg">
           <li>
             <button onClick={toggleDropdown} className="flex items-center px-4 py-2 hover:bg-gray-100">
               <img src="/flags/es.svg" alt="Español" className="h-5 w-5 mr-2" />-ES
