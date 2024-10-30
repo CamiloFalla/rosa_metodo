@@ -1,3 +1,5 @@
+// src/components/LoginModal.jsx
+
 import React, { useState } from 'react';
 import RegisterModal from './RegisterModal';
 
@@ -21,7 +23,10 @@ export default function LoginModal({ isOpen, onClose }) {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg w-3/4 max-w-md p-8 relative">
           {/* Botón de cerrar */}
-          <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none text-2xl">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none text-2xl"
+          >
             &times;
           </button>
 
@@ -58,22 +63,30 @@ export default function LoginModal({ isOpen, onClose }) {
               Tu información está segura con nosotros. Respetamos y protegemos tus datos personales.
             </p>
 
-            <button type="submit" className="bg-orange-800 text-white w-full py-2 rounded hover:bg-orange-700 transition duration-300">
+            <button
+              type="submit"
+              className="bg-orange-800 text-white w-full py-2 rounded hover:bg-orange-700 transition duration-300"
+            >
               Iniciar Sesión
             </button>
           </form>
 
           {/* Botón para abrir el modal de registro */}
           <div className="text-center mt-4">
-            <button onClick={toggleRegisterModal} className="bg-orange-800 text-white px-4 py-2 rounded hover:bg-orange-700 transition duration-300">
+            <button
+              onClick={toggleRegisterModal}
+              className="bg-orange-800 text-white px-4 py-2 rounded hover:bg-orange-700 transition duration-300"
+            >
               Registrarse
             </button>
           </div>
         </div>
       </div>
 
-      {/* Modal de registro */}
-      {isRegisterOpen && <RegisterModal isOpen={isRegisterOpen} onClose={toggleRegisterModal} />}
+      {/* Modal de registro como un modal separado */}
+      {isRegisterOpen && (
+        <RegisterModal isOpen={isRegisterOpen} onClose={toggleRegisterModal} />
+      )}
     </>
   );
 }

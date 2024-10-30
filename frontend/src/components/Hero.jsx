@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/components/Hero.jsx
+import React, { useState, useContext } from 'react';
 import { motion } from "framer-motion";
 import ContactModal from "./ContactModal";
 
@@ -20,15 +21,11 @@ export default function Hero() {
     setRandomizedItems(generateRandomItems()); // Genera nuevos estilos aleatorios
   };
 
-  
   const [isContactOpen, setIsContactOpen] = useState(false);
-
-  
 
   const toggleContactModal = () => {
     setIsContactOpen((prev) => !prev);
   };
-
 
   // Genera estilos aleatorios y amplía el rango de dispersión
   function generateRandomItems() {
@@ -46,7 +43,6 @@ export default function Hero() {
     }));
   }
 
-
   return (
     <section
       className="relative bg-gray-100 h-screen flex flex-col justify-center overflow-hidden px-4"
@@ -61,14 +57,15 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
+            style={{ zIndex: 2 }}
           >
-            <h1 className="text-5xl font-bold mb-4 text-center lg:text-left max-w-3xl leading-tight">
+            <h1 className="text-5xl font-bold mb-4 text-center lg:text-left max-w-3xl leading-tight text-gray-900">
               Evaluando puesto de trabajo entregando Análisis{" "}
               <span className="hover:text-blue-300 hover:animate-pulse transition duration-300">
                 Metodo Rosa
               </span>
             </h1>
-            <h2 className="text-3xl font-semibold mb-6 text-blue text-center lg:text-left">
+            <h2 className="text-3xl font-semibold mb-6 text-blue-500 text-center lg:text-left">
               Especialista para potenciar la gestión empresarial
             </h2>
 
@@ -76,13 +73,13 @@ export default function Hero() {
             <div className="flex justify-center lg:justify-center space-x-4 mt-6">
               <button
                 onClick={toggleContactModal}
-                className="bg-earth-primary text-white px-6 py-3 rounded-md hover:bg-green-600 transition duration-300"
+                className="bg-green-500 text-white px-6 py-3 rounded-md hover:bg-green-600 transition duration-300"
               >
-                Contactenos
-              </ button>
+                Contáctenos
+              </button>
               <a
                 href="/solutions"
-                className="bg-earth-secondary text-white px-6 py-3 rounded-md hover:bg-green-600 transition duration-300"
+                className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-300"
               >
                 Funcionalidades
               </a>
@@ -91,7 +88,10 @@ export default function Hero() {
         </div>
 
         {/* Columna 2: Bloques animados aleatorios */}
-        <div className="relative w-full lg:w-3/10 flex justify-center" style={{ marginLeft: "100px", marginTop: "0px" }}>
+        <div
+          className="relative w-full lg:w-3/10 flex justify-center"
+          style={{ marginLeft: "100px", marginTop: "0px", zIndex: 1 }}
+        >
           {randomizedItems.map((item, index) => (
             <motion.div
               key={`${animateKey}-${index}`}
@@ -111,9 +111,9 @@ export default function Hero() {
       </div>
 
       {/* Fila de Mensaje Final */}
-      <div className="text-center mt-210 px-10 max-w-3xl mx-auto">
+      <div className="text-center mt-10 px-10 max-w-3xl mx-auto">
         <p className="text-lg text-gray-700">
-          Analisis de los puestos de trabajo de la mejor manera para garantizar que sus empleados esten muy cuiidados y siempre al dia en la mejor ergonomia para trabajar
+          Análisis de los puestos de trabajo de la mejor manera para garantizar que sus empleados estén muy cuidados y siempre al día en la mejor ergonomía para trabajar.
         </p>
       </div>
       {/* Popup de Contact Us */}

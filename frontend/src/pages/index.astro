@@ -1,19 +1,18 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header';
-import MainContent from '../components/MainContent';
-import Footer from '../components/Footer';
-
+import App from '../components/App.jsx';
+import '../styles/global.css'; // Importa el CSS global
 ---
 
-<Layout title="Bienvenido a Evaluatupuesto">
-	
-	<Header client:load />
-    
-    <Footer />
-	
 
-
-</Layout>
-
-
+<html lang="en">
+  <head>
+    <title>Evaluación Método Rosa</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div>
+      <App client:load />
+    </div>
+  </body>
+</html>

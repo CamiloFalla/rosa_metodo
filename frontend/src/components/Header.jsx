@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+// src/components/Header.jsx
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import LanguageSelector from './LanguageSelector.jsx';
 import ContactModal from './ContactModal.jsx';
 import LoginModal from './LoginModal.jsx';
 
 export default function Header() {
-  const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] =useState(false);
-
-  const toggleSolutions = () => setIsSolutionsOpen(!isSolutionsOpen);
-  const toggleContactModal = () => setIsContactOpen(!isContactOpen);
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-  const toggleLoginModal = () => setIsLoginOpen(!isLoginOpen);
+    const { isLoggedIn, login, logout } = useContext(AuthContext);
+    const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
+    const [isContactOpen, setIsContactOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isLoginOpen, setIsLoginOpen] =useState(false);
+    
+    const toggleSolutions = () => setIsSolutionsOpen(!isSolutionsOpen);
+    const toggleContactModal = () => setIsContactOpen(!isContactOpen);
+    const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+    const toggleLoginModal = () => setIsLoginOpen(!isLoginOpen);
 
 
   return (
@@ -47,13 +50,20 @@ export default function Header() {
 
         {/* Menú a la derecha en pantallas grandes */}
         <div className="hidden lg:flex items-center space-x-4">
-          <button onClick={toggleContactModal} className="text-earth-primary font-merriweather font-medium focus:outline-none">
-            Contactenos
-          </button>
-          <button onClick={toggleLoginModal} className="text-earth-primary font-merriweather font-medium focus:outline-none">
-            Iniciar Sesión
-          </button>
-          <LanguageSelector />
+            {/* Mostrar botones diferentes según el estado de autenticación */}
+            <button onClick={() => { toggleContactModal(); toggleMobileMenu(); }} className="text-earth-primary font-merriweather font-medium focus:outline-none">
+                Contactenos
+            </button>
+            {!isLoggedIn ? (
+            <button onClick={login} className="text-white font-medium focus:outline-none">
+                Iniciar Sesión
+            </button>
+            ) : (
+            <button onClick={logout} className="text-white font-medium focus:outline-none">
+                Cerrar Sesión
+            </button>
+            )}
+            <LanguageSelector />
         </div>
 
         {/* Menú hamburguesa para pantallas móviles a la derecha */}

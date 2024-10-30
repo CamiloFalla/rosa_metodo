@@ -1,4 +1,4 @@
-// RegisterModal.jsx
+// src/components/RegisterModal.jsx
 import React, { useState } from 'react';
 
 export default function RegisterModal({ isOpen, onClose }) {
