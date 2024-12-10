@@ -1,6 +1,6 @@
 //src/components/EditEmployee.jsx
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 export function EditEmployee() {
   const [newname, setNewname] = useState("Aquí el empleado que va a salir");

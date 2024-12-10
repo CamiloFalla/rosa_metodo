@@ -1,17 +1,24 @@
 // src/components/IncludeCardEmployee.jsx
 
+import PropTypes from "prop-types";
 import { useState } from "react";
 import RosaMethodExam from "./RosaMethodExam";
 
-export function IncludeCardEmployee({ children, avatar, initevaluate, name, cargo, area, onViewDetails, employeeId, username }) {
+export function IncludeCardEmployee({
+  avatar,
+  initevaluate,
+  name,
+  cargo,
+  area,
+  onViewDetails,
+  employeeId,
+  username,
+}) {
   const [isevaluate, setisevaluate] = useState(initevaluate);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const imgesrc = avatar || `/images/employee/${name}/${name}.jpg`;
   const buttonText = isevaluate ? "Evaluado" : "Evaluar";
-  const buttonClassName = isevaluate
-    ? "include-card-button is-evaluated bg-green-500 text-white px-4 py-2 rounded cursor-not-allowed"
-    : "include-card-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600";
 
   const handleEvaluateComplete = () => {
     setisevaluate(true);
@@ -19,21 +26,19 @@ export function IncludeCardEmployee({ children, avatar, initevaluate, name, carg
   };
 
   return (
-    <article className="include-card border p-4 rounded shadow-md flex items-center justify-between mb-4">
-      <header className="include-person-total flex items-center gap-6">
-        <img className="include-card-avatar w-16 h-16 rounded-full" alt={name} src={imgesrc} />
-        <div className="include-card-info flex flex-col gap-2">
-          <strong className="text-lg font-bold text-gray-800">{name}</strong>
-          <span className="text-sm text-gray-600">{area}</span>
-          <span className="include-card-rol text-sm font-medium text-gray-700">{cargo}</span>
-        </div>
-      </header>
-      <aside className="flex flex-col items-end gap-2">
+    <article className="border p-4 rounded shadow-md flex flex-col items-center bg-white">
+      <img className="w-24 h-24 rounded-full object-cover mb-4" alt={name} src={imgesrc} />
+      <div className="text-center mb-4">
+        <strong className="block text-lg font-bold text-gray-800">{name}</strong>
+        <span className="block text-sm text-gray-600">{area}</span>
+        <span className="block text-sm font-medium text-gray-700">{cargo}</span>
+      </div>
+      <div className="flex gap-4 mt-2">
         <button
-          className={buttonClassName}
-          onClick={() => {
-            if (!isevaluate) setIsModalOpen(true);
-          }}
+          className={`${
+            isevaluate ? "bg-green-500" : "bg-blue-500 hover:bg-blue-600"
+          } text-white px-4 py-2 rounded`}
+          onClick={() => !isevaluate && setIsModalOpen(true)}
           disabled={isevaluate}
         >
           {buttonText}
@@ -46,8 +51,7 @@ export function IncludeCardEmployee({ children, avatar, initevaluate, name, carg
             Ver Detalles
           </button>
         )}
-      </aside>
-
+      </div>
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <RosaMethodExam
@@ -61,3 +65,14 @@ export function IncludeCardEmployee({ children, avatar, initevaluate, name, carg
     </article>
   );
 }
+
+IncludeCardEmployee.propTypes = {
+  avatar: PropTypes.string,
+  initevaluate: PropTypes.bool,
+  name: PropTypes.string.isRequired,
+  cargo: PropTypes.string.isRequired,
+  area: PropTypes.string.isRequired,
+  onViewDetails: PropTypes.func,
+  employeeId: PropTypes.number.isRequired,
+  username: PropTypes.string.isRequired,
+};

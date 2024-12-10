@@ -1,23 +1,20 @@
+// src/components/UpdateEmployee.jsx
+
+import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import UpdateDataNoForeignKey from "./UpdateDataNoForeignKey";
 import UpdateDataForeign from "./UpdateDataForeign";
 
-export default function UpdateEmployee({
-  employee,
-  dataset,
-  onCancel,
-  onSave,
-}) {
+export default function UpdateEmployee({ employee, dataset, onCancel, onSave }) {
   const [formData, setFormData] = useState(null);
   const [filteredCargos, setFilteredCargos] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (employee && dataset.areas.length > 0 && dataset.cargos.length > 0) {
-      // Asegurar que formData no se vuelve a setear varias veces
+    if (employee && dataset?.areas?.length > 0 && dataset?.cargos?.length > 0) {
       if (!formData) {
-        // id_area ya viene en employee
         const initialFilteredCargos = dataset.cargos.filter(
-          (c) => c.id_area === employee.id_area
+          (cargo) => cargo.id_area === employee.id_area
         );
 
         setFormData({
@@ -34,17 +31,18 @@ export default function UpdateEmployee({
     setFormData((prev) => ({
       ...prev,
       id_area,
-      id_cargo: ""
+      id_cargo: "",
     }));
-    const newFilteredCargos = dataset.cargos.filter((c) => c.id_area === id_area);
+    const newFilteredCargos = dataset.cargos.filter((cargo) => cargo.id_area === id_area);
     setFilteredCargos(newFilteredCargos);
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
+    setError(null);
+
     if (!formData) return;
 
-    // Comparar con employee original
     const changedFields = {};
     for (const key in formData) {
       if (formData[key] !== employee[key]) {
@@ -67,9 +65,11 @@ export default function UpdateEmployee({
         }
       );
       if (!response.ok) throw new Error("Error al actualizar el empleado");
-      onSave({ ...employee, ...changedFields });
+      const updatedEmployee = await response.json();
+      onSave(updatedEmployee);
     } catch (err) {
       console.error(err.message);
+      setError("Hubo un problema al guardar los cambios. Inténtalo nuevamente.");
     }
   };
 
@@ -77,6 +77,7 @@ export default function UpdateEmployee({
 
   return (
     <form onSubmit={handleSave} className="space-y-6">
+      {error && <p className="text-red-500">{error}</p>}
       <UpdateDataNoForeignKey formData={formData} setFormData={setFormData} />
       <UpdateDataForeign
         formData={formData}
@@ -103,3 +104,18 @@ export default function UpdateEmployee({
     </form>
   );
 }
+
+UpdateEmployee.propTypes = {
+  employee: PropTypes.shape({
+    id_empleado: PropTypes.number.isRequired,
+    id_area: PropTypes.number.isRequired,
+    fecha_nacimiento: PropTypes.string.isRequired,
+    fecha_ingreso: PropTypes.string.isRequired,
+  }).isRequired,
+  dataset: PropTypes.shape({
+    areas: PropTypes.arrayOf(PropTypes.object).isRequired,
+    cargos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  }).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+};

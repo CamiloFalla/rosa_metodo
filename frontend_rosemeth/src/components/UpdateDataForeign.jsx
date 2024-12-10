@@ -1,4 +1,6 @@
-import React from "react";
+// src/components/UpdateDataForeign.jsx
+
+import PropTypes from "prop-types";
 
 export default function UpdateDataForeign({ formData, setFormData, areas, cargos, onAreaChange }) {
   return (
@@ -57,3 +59,21 @@ export default function UpdateDataForeign({ formData, setFormData, areas, cargos
     </div>
   );
 }
+
+UpdateDataForeign.propTypes = {
+  formData: PropTypes.object.isRequired,
+  setFormData: PropTypes.func.isRequired,
+  areas: PropTypes.arrayOf(
+    PropTypes.shape({
+      id_area: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  cargos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id_cargo: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onAreaChange: PropTypes.func.isRequired,
+};

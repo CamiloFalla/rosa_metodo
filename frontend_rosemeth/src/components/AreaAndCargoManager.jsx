@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 import CargoList from "./CargoList";
 import AddAreaOrCargo from "./AddAreaOrCargo";
 
@@ -46,7 +47,45 @@ export default function AreaAndCargoManager({
         setNewCargo={setNewCargo}
       />
 
-      <AddAreaOrCargo type="cargo" areaId={selectedArea} onNewItem={(newItem) => setFilteredCargos([...filteredCargos, newItem])} />
+      <AddAreaOrCargo
+        type="cargo"
+        areaId={selectedArea}
+        onNewItem={(newItem) => setFilteredCargos([...filteredCargos, newItem])}
+      />
     </div>
   );
 }
+
+// Validación de props
+AreaAndCargoManager.propTypes = {
+  areas: PropTypes.arrayOf(
+    PropTypes.shape({
+      id_area: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+    })
+  ).isRequired, // Lista de áreas
+  cargos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id_cargo: PropTypes.number.isRequired,
+      id_area: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+    })
+  ).isRequired, // Lista de cargos
+  selectedArea: PropTypes.number, // ID del área seleccionada (puede ser null)
+  setSelectedArea: PropTypes.func.isRequired, // Función para actualizar el área seleccionada
+  filteredCargos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id_cargo: PropTypes.number.isRequired,
+      id_area: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+    })
+  ).isRequired, // Lista de cargos filtrados por área
+  setFilteredCargos: PropTypes.func.isRequired, // Función para actualizar los cargos filtrados
+  formData: PropTypes.object.isRequired, // Datos del formulario
+  setFormData: PropTypes.func.isRequired, // Función para actualizar los datos del formulario
+};
+
+// Valores predeterminados para props opcionales
+AreaAndCargoManager.defaultProps = {
+  selectedArea: null,
+};

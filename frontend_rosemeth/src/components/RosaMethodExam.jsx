@@ -1,6 +1,7 @@
 // src/components/RosaMethodExam.jsx
 
 import { useState } from 'react';
+import PropTypes from "prop-types";
 import EvaluationOption from './EvaluationOption';
 
 const categories = {
@@ -141,7 +142,7 @@ const categories = {
 
 const categoryKeys = Object.keys(categories);
 
-export default function RosaMethodExam({ onClose, onEvaluateComplete, employeeId, username }) {
+export default function RosaMethodExam({ onClose, onEvaluateComplete, employeeId}) {
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   const [currentSubcategoryIndex, setCurrentSubcategoryIndex] = useState(0);
   const [responses, setResponses] = useState({});
@@ -230,57 +231,70 @@ export default function RosaMethodExam({ onClose, onEvaluateComplete, employeeId
   };
 
   return (
-    <div className="p-8 bg-white rounded shadow-lg relative">
-      <button onClick={onClose} className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded">
-        Cerrar
-      </button>
-      <h1 className="text-2xl font-bold mb-4">Método Rosa - Evaluación</h1>
-      <h2 className="text-xl mb-2">{currentCategory.name}</h2>
-      <h3 className="text-lg mb-4">{currentSubcategory.name}</h3>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div className='bg-white rounded shadow-lg relative p-8' style={{ maxHeight: '90vh', overflowY: 'auto'}}>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <h4 className="font-semibold mb-2">Opciones Únicas</h4>
-          {currentSubcategory.uniqueOptions.map((option) => (
-            <EvaluationOption
-              key={option.id}
-              option={option}
-              onSelect={() => handleOptionSelect(currentSubcategory.id, option.id)}
-              selected={responses[currentSubcategory.id]?.unique === option.id}
-            />
-          ))}
+        <button onClick={onClose} className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded">
+          Cerrar
+        </button>
+        <h1 className="text-2xl font-bold mb-4">Método Rosa - Evaluación</h1>
+        <h2 className="text-xl mb-2">{currentCategory.name}</h2>
+        <h3 className="text-lg mb-4">{currentSubcategory.name}</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h4 className="font-semibold mb-2">Opciones Únicas</h4>
+            {currentSubcategory.uniqueOptions.map((option) => (
+              <EvaluationOption
+                key={option.id}
+                option={option}
+                onSelect={() => handleOptionSelect(currentSubcategory.id, option.id)}
+                selected={responses[currentSubcategory.id]?.unique === option.id}
+              />
+            ))}
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-2">Opciones Adicionales</h4>
+            {currentSubcategory.additionalOptions.map((option) => (
+              <EvaluationOption
+                key={option.id}
+                option={option}
+                onSelect={() => handleOptionSelect(currentSubcategory.id, option.id, true)}
+                selected={responses[currentSubcategory.id]?.additional?.includes(option.id)}
+                multiple={true}
+              />
+            ))}
+          </div>
         </div>
 
-        <div>
-          <h4 className="font-semibold mb-2">Opciones Adicionales</h4>
-          {currentSubcategory.additionalOptions.map((option) => (
-            <EvaluationOption
-              key={option.id}
-              option={option}
-              onSelect={() => handleOptionSelect(currentSubcategory.id, option.id, true)}
-              selected={responses[currentSubcategory.id]?.additional?.includes(option.id)}
-              multiple={true}
-            />
-          ))}
+        <div className="mt-6">
+          <label className="block mb-2 font-semibold">Subir evidencia</label>
+          <input type="file" onChange={handleEvidenceUpload} />
+          {responses[currentSubcategory.id]?.evidenceFile && (
+            <p className="text-sm mt-2">Archivo cargado: {responses[currentSubcategory.id].evidenceFile.name}</p>
+          )}
         </div>
-      </div>
 
-      <div className="mt-6">
-        <label className="block mb-2 font-semibold">Subir evidencia</label>
-        <input type="file" onChange={handleEvidenceUpload} />
-        {responses[currentSubcategory.id]?.evidenceFile && (
-          <p className="text-sm mt-2">Archivo cargado: {responses[currentSubcategory.id].evidenceFile.name}</p>
-        )}
-      </div>
+        <button
+          onClick={handleNext}
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        >
+          {currentCategoryIndex === categoryKeys.length - 1 && currentSubcategoryIndex === currentCategory.subcategories.length - 1
+            ? "Finalizar"
+            : "Siguiente"}
+        </button>
 
-      <button
-        onClick={handleNext}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-      >
-        {currentCategoryIndex === categoryKeys.length - 1 && currentSubcategoryIndex === currentCategory.subcategories.length - 1
-          ? "Finalizar"
-          : "Siguiente"}
-      </button>
+
+      </div>
+      
     </div>
   );
 }
+
+RosaMethodExam.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  onEvaluateComplete: PropTypes.func.isRequired,
+  employeeId: PropTypes.number.isRequired,
+  username: PropTypes.string.isRequired,
+};

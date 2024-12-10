@@ -1,5 +1,6 @@
 // src/components/RosaEvaluationView.jsx
 
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
 export default function RosaEvaluationView({ id_evaluacion }) {
@@ -56,3 +57,7 @@ export default function RosaEvaluationView({ id_evaluacion }) {
     </div>
   );
 }
+
+RosaEvaluationView.propTypes = {
+  id_evaluacion: PropTypes.number.isRequired,
+};

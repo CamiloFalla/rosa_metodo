@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 export default function AddAreaOrCargo({ type, areaId, onNewItem }) {
   const [newItem, setNewItem] = useState("");
@@ -40,3 +41,15 @@ export default function AddAreaOrCargo({ type, areaId, onNewItem }) {
     </div>
   );
 }
+
+// Validación de props
+AddAreaOrCargo.propTypes = {
+  type: PropTypes.oneOf(["area", "cargo"]).isRequired, // type debe ser 'area' o 'cargo'
+  areaId: PropTypes.number, // areaId es opcional (solo se usa cuando type es 'cargo')
+  onNewItem: PropTypes.func.isRequired, // onNewItem debe ser una función
+};
+
+// Valores predeterminados para props opcionales
+AddAreaOrCargo.defaultProps = {
+  areaId: null,
+};

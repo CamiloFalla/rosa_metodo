@@ -1,4 +1,6 @@
-import React from "react";
+// src/components/UpdataNoForeignKey.jsx
+
+import PropTypes from "prop-types";
 
 export default function UpdateDataNoForeignKey({ formData, setFormData }) {
   return (
@@ -93,3 +95,9 @@ export default function UpdateDataNoForeignKey({ formData, setFormData }) {
     </div>
   );
 }
+
+
+UpdateDataNoForeignKey.propTypes = {
+  formData: PropTypes.object.isRequired,
+  setFormData: PropTypes.func.isRequired,
+};

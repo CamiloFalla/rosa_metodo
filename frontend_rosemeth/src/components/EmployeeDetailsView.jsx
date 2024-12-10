@@ -1,10 +1,10 @@
 // src/components/EmployeeDetailsView.jsx
-import EmployeeImage from './EmployeeImage';
-import EmployeeImageUpload from './EmployeeImageUpload';
+import PropTypes from "prop-types";
+import EmployeeImage from "./EmployeeImage";
+import EmployeeImageUpload from "./EmployeeImageUpload";
 
 export default function EmployeeDetailsView({ employee, onEdit, onImageUpdated }) {
   const handleImageUploaded = (newImageUrl) => {
-    // Llamar a la función prop onImageUpdated para actualizar el estado en EmployeeDetails
     onImageUpdated(newImageUrl);
   };
 
@@ -30,8 +30,28 @@ export default function EmployeeDetailsView({ employee, onEdit, onImageUpdated }
         Actualizar Datos
       </button>
 
-      {/* Componente para subir imagen */}
       <EmployeeImageUpload employee={employee} onImageUploaded={handleImageUploaded} />
     </div>
   );
 }
+
+EmployeeDetailsView.propTypes = {
+  employee: PropTypes.shape({
+    id_empleado: PropTypes.number.isRequired,
+    nombre: PropTypes.string.isRequired,
+    apellidos: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    fecha_nacimiento: PropTypes.string.isRequired,
+    fecha_ingreso: PropTypes.string.isRequired,
+    residencia: PropTypes.string.isRequired,
+    ciudad_residencia: PropTypes.string.isRequired,
+    estrato: PropTypes.number.isRequired,
+    cargo_nombre: PropTypes.string.isRequired,
+    area_nombre: PropTypes.string.isRequired,
+    activo: PropTypes.bool.isRequired,
+    imagen: PropTypes.string,
+  }).isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onImageUpdated: PropTypes.func.isRequired,
+};

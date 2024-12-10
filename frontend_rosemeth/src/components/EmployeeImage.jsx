@@ -1,5 +1,6 @@
 // EmployeeImage.jsx
-import React, { useState } from 'react';
+import PropTypes from "prop-types";
+import { useState } from "react";
 
 export default function EmployeeImage({ employee }) {
   const [loading, setLoading] = useState(true);
@@ -16,9 +17,17 @@ export default function EmployeeImage({ employee }) {
         alt={`${employee.nombre} ${employee.apellidos}`}
         className="w-48 h-48 rounded-full"
         onLoad={handleImageLoad}
-        onError={() => setLoading(false)} // Si falla, dejar de mostrar "Cargando"
-        style={{ display: loading ? 'none' : 'block' }}
+        onError={() => setLoading(false)}
+        style={{ display: loading ? "none" : "block" }}
       />
     </div>
   );
 }
+
+EmployeeImage.propTypes = {
+  employee: PropTypes.shape({
+    imagen: PropTypes.string,
+    nombre: PropTypes.string.isRequired,
+    apellidos: PropTypes.string.isRequired,
+  }).isRequired,
+};

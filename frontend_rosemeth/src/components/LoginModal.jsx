@@ -1,4 +1,7 @@
-import React, { useContext } from "react";
+// src/components/LoginModal.jsx
+
+import PropTypes from "prop-types";
+import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 export default function LoginModal({ isOpen, onClose }) {
@@ -12,10 +15,10 @@ export default function LoginModal({ isOpen, onClose }) {
         <h2 className="text-2xl font-bold">Iniciar Sesión</h2>
         <button
           onClick={() => {
-            login(); // Simula el inicio de sesión
-            onClose(); // Cierra el modal
+            login();
+            onClose();
           }}
-          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
         >
           Iniciar Sesión
         </button>
@@ -23,3 +26,8 @@ export default function LoginModal({ isOpen, onClose }) {
     </div>
   );
 }
+
+LoginModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};

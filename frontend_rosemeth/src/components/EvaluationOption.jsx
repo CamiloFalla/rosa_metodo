@@ -1,11 +1,12 @@
 // src/components/EvaluationOption.jsx
-import React from 'react';
+
+import PropTypes from "prop-types";
 
 export default function EvaluationOption({ option, onSelect, selected, multiple = false }) {
   return (
     <div
       className={`p-4 border rounded-lg cursor-pointer ${
-        selected ? 'bg-green-200 border-green-500' : 'hover:bg-gray-100'
+        selected ? "bg-green-200 border-green-500" : "hover:bg-gray-100"
       }`}
       onClick={onSelect}
     >
@@ -15,3 +16,14 @@ export default function EvaluationOption({ option, onSelect, selected, multiple 
     </div>
   );
 }
+
+EvaluationOption.propTypes = {
+  option: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+  }).isRequired,
+  onSelect: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
+  multiple: PropTypes.bool,
+};

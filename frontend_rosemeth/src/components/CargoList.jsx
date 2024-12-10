@@ -1,4 +1,8 @@
-export default function CargoList({ cargos, formData, setFormData, newCargo, setNewCargo }) {
+// src/components/CargoList.jsx
+
+import PropTypes from "prop-types";
+
+export default function CargoList({ cargos, formData, setFormData }) {
   return (
     <div>
       <label className="block text-gray-700">Cargo:</label>
@@ -17,3 +21,14 @@ export default function CargoList({ cargos, formData, setFormData, newCargo, set
     </div>
   );
 }
+
+CargoList.propTypes = {
+  cargos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id_cargo: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  formData: PropTypes.object.isRequired,
+  setFormData: PropTypes.func.isRequired,
+};

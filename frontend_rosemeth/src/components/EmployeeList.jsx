@@ -38,7 +38,7 @@ export default function EmployeeList() {
   }
 
   return (
-    <div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
       {employees.map((employee) => (
         <div key={employee.id_empleado} className="mb-4">
           <IncludeCardEmployee
