@@ -1,9 +1,9 @@
-//components/IncludeCardEmployee.jsx
+// src/components/IncludeCardEmployee.jsx
 
 import { useState } from "react";
 import RosaMethodExam from "./RosaMethodExam";
 
-export function IncludeCardEmployee({ children, avatar, initevaluate, name, cargo, area, onViewDetails }) {
+export function IncludeCardEmployee({ children, avatar, initevaluate, name, cargo, area, onViewDetails, employeeId, username }) {
   const [isevaluate, setisevaluate] = useState(initevaluate);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -38,7 +38,6 @@ export function IncludeCardEmployee({ children, avatar, initevaluate, name, carg
         >
           {buttonText}
         </button>
-        {/* Botón de Ver Detalles */}
         {onViewDetails && (
           <button
             onClick={onViewDetails}
@@ -54,6 +53,8 @@ export function IncludeCardEmployee({ children, avatar, initevaluate, name, carg
           <RosaMethodExam
             onClose={() => setIsModalOpen(false)}
             onEvaluateComplete={handleEvaluateComplete}
+            employeeId={employeeId}
+            username={username}
           />
         </div>
       )}

@@ -1,3 +1,5 @@
+// src/components/EmployeeList.jsx
+
 import { useEffect, useState } from "react";
 import { IncludeCardEmployee } from "./IncludeCardEmployee";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +10,6 @@ export default function EmployeeList() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch empleados desde la API
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
@@ -36,12 +37,13 @@ export default function EmployeeList() {
     return <p>Error al cargar empleados: {error}</p>;
   }
 
-  // Renderizar la lista de empleados
   return (
     <div>
       {employees.map((employee) => (
         <div key={employee.id_empleado} className="mb-4">
           <IncludeCardEmployee
+            employeeId={employee.id_empleado}
+            username={employee.username}
             initevaluate={employee.evaluado}
             name={`${employee.nombre} ${employee.apellidos}`}
             cargo={employee.cargo_nombre}
@@ -51,7 +53,6 @@ export default function EmployeeList() {
           >
             {employee.area_nombre}
           </IncludeCardEmployee>
-          
         </div>
       ))}
     </div>

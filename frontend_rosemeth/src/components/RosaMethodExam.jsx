@@ -1,4 +1,5 @@
-// RosaMethodExam.jsx
+// src/components/RosaMethodExam.jsx
+
 import { useState } from 'react';
 import EvaluationOption from './EvaluationOption';
 
@@ -138,67 +139,103 @@ const categories = {
   },
 };
 
+const categoryKeys = Object.keys(categories);
 
-export default function RosaMethodExam({ onClose, onEvaluateComplete }) {
-  const [currentCategory, setCurrentCategory] = useState("A");
+export default function RosaMethodExam({ onClose, onEvaluateComplete, employeeId, username }) {
+  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   const [currentSubcategoryIndex, setCurrentSubcategoryIndex] = useState(0);
   const [responses, setResponses] = useState({});
-  const [evidence, setEvidence] = useState(null);
+
+  const currentCategoryKey = categoryKeys[currentCategoryIndex];
+  const currentCategory = categories[currentCategoryKey];
+  const currentSubcategory = currentCategory.subcategories[currentSubcategoryIndex];
 
   const handleOptionSelect = (subCategoryId, optionId, isAdditional = false) => {
     setResponses((prev) => {
-      const updatedSubCategory = {
-        ...prev[subCategoryId],
-        [isAdditional ? "additional" : "unique"]: isAdditional
-          ? [...(prev[subCategoryId]?.additional || [])]
-          : optionId,
-      };
+      const prevSub = prev[subCategoryId] || { unique: null, additional: [], evidenceFile: null };
+      let updatedAdditional = [...prevSub.additional];
 
       if (isAdditional) {
-        // Toggle selection for additional options
-        if (updatedSubCategory.additional.includes(optionId)) {
-          updatedSubCategory.additional = updatedSubCategory.additional.filter(
-            (id) => id !== optionId
-          );
+        if (updatedAdditional.includes(optionId)) {
+          updatedAdditional = updatedAdditional.filter((id) => id !== optionId);
         } else {
-          updatedSubCategory.additional.push(optionId);
+          updatedAdditional.push(optionId);
         }
-      }
 
-      return {
-        ...prev,
-        [subCategoryId]: updatedSubCategory,
-      };
+        return { ...prev, [subCategoryId]: { ...prevSub, additional: updatedAdditional } };
+      } else {
+        return { ...prev, [subCategoryId]: { ...prevSub, unique: optionId } };
+      }
     });
   };
 
+  const handleEvidenceUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setResponses((prev) => {
+      const prevSub = prev[currentSubcategory.id] || { unique: null, additional: [], evidenceFile: null };
+      return { ...prev, [currentSubcategory.id]: { ...prevSub, evidenceFile: file } };
+    });
+  };
+
+  const handleFinish = async () => {
+    // Aquí hacemos el fetch
+    // Crear el FormData con responses y los archivos
+    const formData = new FormData();
+    formData.append('responses', JSON.stringify({
+      ...responses,
+      // Puedes agregar variables como usoSillaHoras, usoPantallaHoras, etc. si lo requieres:
+      usoSillaHoras: 5, // Ejemplo
+      usoPantallaHoras: 3, // Ejemplo
+      usoTelefonoHoras: 2 // Ejemplo
+    }));
+
+    // Agregar archivos
+    for (const [subCatId, subCatData] of Object.entries(responses)) {
+      if (subCatData.evidenceFile) {
+        formData.append(`file_${subCatId}`, subCatData.evidenceFile);
+      }
+    }
+
+    const res = await fetch(`http://localhost:12348/metodorosa/${employeeId}/final`, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!res.ok) {
+      console.error("Error al guardar la evaluación");
+      return;
+    }
+
+    const data = await res.json();
+    console.log("Evaluación guardada:", data);
+    onEvaluateComplete();
+  };
+
   const handleNext = () => {
-    const subcategories = categories[currentCategory].subcategories;
+    const subcategories = currentCategory.subcategories;
     if (currentSubcategoryIndex < subcategories.length - 1) {
-      setCurrentSubcategoryIndex(currentSubcategoryIndex + 1);
+      setCurrentSubcategoryIndex((prev) => prev + 1);
     } else {
-      // Evaluación completada
-      onEvaluateComplete();
-      onClose();
+      if (currentCategoryIndex < categoryKeys.length - 1) {
+        setCurrentCategoryIndex((prev) => prev + 1);
+        setCurrentSubcategoryIndex(0);
+      } else {
+        // Finalizar: aquí hacemos el fetch directo
+        handleFinish();
+        onClose();
+      }
     }
   };
 
-  const handleEvidenceUpload = (event) => {
-    setEvidence(event.target.files[0]);
-  };
-
-  const currentSubcategory = categories[currentCategory].subcategories[currentSubcategoryIndex];
-
   return (
     <div className="p-8 bg-white rounded shadow-lg relative">
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded"
-      >
+      <button onClick={onClose} className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded">
         Cerrar
       </button>
       <h1 className="text-2xl font-bold mb-4">Método Rosa - Evaluación</h1>
-      <h2 className="text-xl mb-2">{categories[currentCategory].name}</h2>
+      <h2 className="text-xl mb-2">{currentCategory.name}</h2>
       <h3 className="text-lg mb-4">{currentSubcategory.name}</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -231,16 +268,18 @@ export default function RosaMethodExam({ onClose, onEvaluateComplete }) {
       <div className="mt-6">
         <label className="block mb-2 font-semibold">Subir evidencia</label>
         <input type="file" onChange={handleEvidenceUpload} />
-        {evidence && <p className="text-sm mt-2">Archivo cargado: {evidence.name}</p>}
+        {responses[currentSubcategory.id]?.evidenceFile && (
+          <p className="text-sm mt-2">Archivo cargado: {responses[currentSubcategory.id].evidenceFile.name}</p>
+        )}
       </div>
 
       <button
         onClick={handleNext}
         className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
       >
-        {currentSubcategoryIndex < categories[currentCategory].subcategories.length - 1
-          ? "Siguiente"
-          : "Finalizar"}
+        {currentCategoryIndex === categoryKeys.length - 1 && currentSubcategoryIndex === currentCategory.subcategories.length - 1
+          ? "Finalizar"
+          : "Siguiente"}
       </button>
     </div>
   );
