@@ -1,11 +1,11 @@
 // src/components/App.jsx
-import React from 'react';
-import { AuthProvider } from '../context/AuthContext';
-import MainComponent from './MainComponent';
-import Header from './Header';
-import Footer from './Footer';
+import React from "react";
+import { AuthProvider } from "../context/AuthContext";
+import Header from "./Header";
+import MainComponent from "./MainComponent";
+import Footer from "./Footer";
 
-export default function App() {
+function App() {
   return (
     <AuthProvider>
       <Header />
@@ -14,3 +14,5 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+export default App;

@@ -3,15 +3,30 @@ import React, { useState } from 'react';
 
 export default function RegisterModal({ isOpen, onClose }) {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // Eliminamos email si no es necesario
 
   if (!isOpen) return null;
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Lógica de registro (ej. API para crear usuario)
-    console.log('Registering:', { username, email, password });
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Usuario registrado exitosamente. Ahora puedes iniciar sesión.');
+        onClose();
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error('Error al registrar:', error);
+    }
   };
 
   return (

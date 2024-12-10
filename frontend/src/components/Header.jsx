@@ -1,22 +1,22 @@
 // src/components/Header.jsx
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React, { useState } from 'react';
 import LanguageSelector from './LanguageSelector.jsx';
 import ContactModal from './ContactModal.jsx';
 import LoginModal from './LoginModal.jsx';
 
 export default function Header() {
-    const { isLoggedIn, login, logout } = useContext(AuthContext);
-    const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
-    const [isContactOpen, setIsContactOpen] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isLoginOpen, setIsLoginOpen] =useState(false);
-    
-    const toggleSolutions = () => setIsSolutionsOpen(!isSolutionsOpen);
-    const toggleContactModal = () => setIsContactOpen(!isContactOpen);
-    const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-    const toggleLoginModal = () => setIsLoginOpen(!isLoginOpen);
+  const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Simulación de autenticación
 
+  const toggleSolutions = () => setIsSolutionsOpen(!isSolutionsOpen);
+  const toggleContactModal = () => setIsContactOpen(!isContactOpen);
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const toggleLoginModal = () => setIsLoginOpen(!isLoginOpen);
+  const login = () => setIsLoggedIn(true); // Simulación de iniciar sesión
+  const logout = () => setIsLoggedIn(false); // Simulación de cerrar sesión
 
   return (
     <>
@@ -50,20 +50,19 @@ export default function Header() {
 
         {/* Menú a la derecha en pantallas grandes */}
         <div className="hidden lg:flex items-center space-x-4">
-            {/* Mostrar botones diferentes según el estado de autenticación */}
-            <button onClick={() => { toggleContactModal(); toggleMobileMenu(); }} className="text-earth-primary font-merriweather font-medium focus:outline-none">
-                Contactenos
-            </button>
-            {!isLoggedIn ? (
+          <button onClick={() => { toggleContactModal(); toggleMobileMenu(); }} className="text-earth-primary font-merriweather font-medium focus:outline-none">
+            Contactenos
+          </button>
+          {!isLoggedIn ? (
             <button onClick={login} className="text-white font-medium focus:outline-none">
-                Iniciar Sesión
+              Iniciar Sesión
             </button>
-            ) : (
+          ) : (
             <button onClick={logout} className="text-white font-medium focus:outline-none">
-                Cerrar Sesión
+              Cerrar Sesión
             </button>
-            )}
-            <LanguageSelector />
+          )}
+          <LanguageSelector />
         </div>
 
         {/* Menú hamburguesa para pantallas móviles a la derecha */}
@@ -90,7 +89,6 @@ export default function Header() {
                   <li><a href="/solutions/Areas" className="block px-4 py-2 hover:bg-gray-100">Analisis por areas</a></li>
                   <li><a href="/solutions/indicators" className="block px-4 py-2 hover:bg-gray-100">Indicadores</a></li>
                   <li><a href="/solutions/evaluation" className="block px-4 py-2 hover:bg-gray-100">Inicia Evaluación</a></li>
-                  
                 </ul>
               )}
             </li>
@@ -108,7 +106,6 @@ export default function Header() {
 
       {/* Popup de Contact Us */}
       {isContactOpen && <ContactModal isOpen={isContactOpen} onClose={toggleContactModal} />}
-      {/* Popup de Contact Us */}
       {isLoginOpen && <LoginModal isOpen={isLoginOpen} onClose={toggleLoginModal} />}
     </>
   );
